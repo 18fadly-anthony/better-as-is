@@ -1,0 +1,5 @@
+status: 200 Cool
+X-hostname: cit384-${USER}.csun.edu
+content-type: text/plain
+
+A plain text file
