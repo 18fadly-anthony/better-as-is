@@ -6,8 +6,11 @@ import os
 import sys
 import argparse
 
-verbose = False
+http_ver = "HTTP/1.1"
 http_codes = [100,101,102,103,200,201,202,203,204,205,206,207,208,226,300,301,302,303,304,305,306,307,308,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,421,422,423,424,425,426,428,429,431,451,500,501,502,503,504,505,506,507,508,510,511]
+serverline = "server: premortal/cit-384/${USER}"
+dateline = "date: ${DATE}"
+hardcoded = [serverline, dateline]
 
 
 def read_file_to_array(filename):
@@ -16,6 +19,12 @@ def read_file_to_array(filename):
         for line in f:
             content_array.append(line.strip('\n'))
         return(content_array)
+
+
+def file_overwrite(filename, contents):
+    f = open(filename, "w")
+    f.write(contents)
+    f.close()
 
 
 def get_status(line):
@@ -51,7 +60,9 @@ def get_status(line):
 def parse_as_is(file):
     result = []
     data = read_file_to_array(file)
+    result.append(http_ver)
     result.append(get_status(data[0]))
+    result.append(hardcoded)
     file_array = []
     for i in range(1, len(data)):
         file_array.append(data[i])
@@ -59,11 +70,22 @@ def parse_as_is(file):
     return result
 
 
+def generate_http(data):
+    result = data[0] # http_ver
+    result += " "
+    result += str(data[1][0]) # status code
+    result += " "
+    result += data[1][1] # status
+    for i in data[2]: # hardcoded
+        result += "\n"
+        result += i
+    for i in data[3]: # rest of the file
+        result += "\n"
+        result += i
+    return result
+
+
 def main():
-    global verbose
-
-    # ArgParse
-
     parser = argparse.ArgumentParser(
         description = '''As-Is Parser''',
         epilog = '''Copyright (c) 2021 Anthony Fadly'''
@@ -71,11 +93,8 @@ def main():
 
     parser.add_argument('-i', '--input', metavar = '<file>', nargs = 1, type = str, default = [None], help = "Specify input file")
     parser.add_argument('-o', '--output', metavar = '<path>', nargs = 1, type = str, default = [None], help = "Optionally specify output file instead of stdout")
-    parser.add_argument('-v', '--verbose', action='store_true', default=False, help='Be verbose')
 
     args = parser.parse_args()
-
-    verbose = args.verbose
 
     # No argument
     if len(sys.argv) == 1:
@@ -84,15 +103,19 @@ def main():
         print("Use -h for more")
         exit()
 
-    if args.input == None:
+    if args.input[0] == None:
         print("Error: no input file specified")
         print("Use -i filename")
         print("Use -h for more")
         exit()
 
     elif os.path.exists(args.input[0]):
-        data = parse_as_is(args.input[0])
-        print(data)
+        http = generate_http(parse_as_is(args.input[0]))
+
+        if args.output[0] == None:
+            print(http)
+        else:
+            file_overwrite(args.output[0], http)
 
 
 if __name__ == "__main__":
