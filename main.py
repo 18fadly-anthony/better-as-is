@@ -9,8 +9,27 @@ import argparse
 verbose = False
 
 
-def parse_as_is():
-    return True
+def read_file_to_array(filename):
+    content_array = []
+    with open(filename) as f:
+        for line in f:
+            content_array.append(line.strip('\n'))
+        return(content_array)
+
+
+def get_status(line):
+    result = []
+    statusline = line.split(' ')
+    statusnum = result.append(statusline[1])
+    result.append(statusline[2])
+    return result
+
+
+def parse_as_is(file):
+    result = []
+    data = read_file_to_array(file)
+    result.append(get_status(data[0]))
+    return result
 
 
 def main():
@@ -36,13 +55,16 @@ def main():
         print("Error: no option specified")
         print("Use -i filename")
         print("Use -h for more")
+        exit()
 
     if args.input == None:
         print("Error: no input file specified")
         print("Use -i filename")
         print("Use -h for more")
-    elif os.path.exist(args.input):
-        data = parse_as_is(args.input)
+        exit()
+
+    elif os.path.exists(args.input[0]):
+        data = parse_as_is(args.input[0])
         print(data)
 
 
