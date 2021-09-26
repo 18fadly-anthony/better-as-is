@@ -52,6 +52,10 @@ def parse_as_is(file):
     result = []
     data = read_file_to_array(file)
     result.append(get_status(data[0]))
+    file_array = []
+    for i in range(1, len(data)):
+        file_array.append(data[i])
+    result.append(file_array)
     return result
 
 
