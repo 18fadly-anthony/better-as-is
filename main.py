@@ -8,9 +8,11 @@ import argparse
 
 http_ver = "HTTP/1.1"
 http_codes = [100,101,102,103,200,201,202,203,204,205,206,207,208,226,300,301,302,303,304,305,306,307,308,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,421,422,423,424,425,426,428,429,431,451,500,501,502,503,504,505,506,507,508,510,511]
+not_found_status = ["400", "Not Found"]
 serverline = "server: premortal/cit-384/${USER}"
 dateline = "date: ${DATE}"
 hardcoded = [serverline, dateline]
+
 
 
 def read_file_to_array(filename):
@@ -85,6 +87,13 @@ def generate_http(data):
     result += "\n"
     return result
 
+def no_such():
+    result = []
+    result.append(http_ver)
+    result.append(not_found_status)
+    result.append(hardcoded)
+    result.append([])
+    return result
 
 def main():
     parser = argparse.ArgumentParser(
@@ -113,10 +122,13 @@ def main():
     elif os.path.exists(args.input[0]):
         http = generate_http(parse_as_is(args.input[0]))
 
-        if args.output[0] == None:
-            sys.stdout.write(http)
-        else:
-            file_overwrite(args.output[0], http)
+    else:
+        http = generate_http(no_such())
+
+    if args.output[0] == None:
+        sys.stdout.write(http)
+    else:
+        file_overwrite(args.output[0], http)
 
 
 if __name__ == "__main__":
