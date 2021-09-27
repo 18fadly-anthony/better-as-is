@@ -82,6 +82,7 @@ def generate_http(data):
     for i in data[3]: # rest of the file
         result += "\n"
         result += i
+    result += "\n"
     return result
 
 
@@ -113,7 +114,7 @@ def main():
         http = generate_http(parse_as_is(args.input[0]))
 
         if args.output[0] == None:
-            print(http)
+            sys.stdout.write(http)
         else:
             file_overwrite(args.output[0], http)
 
