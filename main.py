@@ -92,7 +92,7 @@ def main():
     )
 
     parser.add_argument('-i', '--input', metavar = '<file>', nargs = 1, type = str, default = [None], help = "Specify input file")
-    parser.add_argument('-o', '--output', metavar = '<path>', nargs = 1, type = str, default = [None], help = "Optionally specify output file instead of stdout")
+    parser.add_argument('-o', '--output', metavar = '<file>', nargs = 1, type = str, default = [None], help = "Optionally specify output file instead of stdout")
 
     args = parser.parse_args()
 
