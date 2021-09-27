@@ -87,6 +87,7 @@ def generate_http(data):
     result += "\n"
     return result
 
+
 def no_such():
     result = []
     result.append(http_ver)
@@ -94,6 +95,7 @@ def no_such():
     result.append(hardcoded)
     result.append([])
     return result
+
 
 def main():
     parser = argparse.ArgumentParser(
