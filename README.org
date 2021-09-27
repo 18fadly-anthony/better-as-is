@@ -2,9 +2,8 @@
 #+AUTHOR: Anthony Fadly
 #+LATEX_HEADER: \usepackage[margin=1in]{geometry}
 #+OPTIONS: toc:nil
------
 A very simple parser for a theoretical format called as-is for my CIT 384 class
-* Example Input
+** Example Input
 #+BEGIN_SRC http
 status: 200 Cool
 X-hostname: cit384-${USER}.csun.edu
@@ -12,7 +11,7 @@ content-type: text/plain
 
 A plain text file
 #+END_SRC
-* Example Output
+** Example Output
 #+BEGIN_SRC http
 HTTP/1.1 200 Cool
 server: premortal/cit-384/${USER}
